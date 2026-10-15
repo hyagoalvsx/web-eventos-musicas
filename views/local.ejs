@@ -1,0 +1,43 @@
+<h1 class="mt-5">Consulta de Locais</h1>
+
+<a href="/locais/novo" class="btn btn-success mt-2">Cadastrar Novo Local</a>
+
+<table class="table mt-3">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Nome</th>
+            <th>Endereço</th>
+            <th>Capacidade</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% if (locals.locais && locais.length> 0) { %>
+            <% locais.forEach(function(local) { %>
+                <tr>
+                    <td>
+                        <%= local.id_local %>
+                    </td>
+                    <td>
+                        <%= local.nome %>
+                    </td>
+                    <td>
+                        <%= local.endereco %>
+                    </td>
+                    <td>
+                        <%= local.capacidade %>
+                    </td>
+                    <td>
+                        <a href="#" class="btn btn-sm btn-secondary">Atualizar</a>
+                        <a href="#" class="btn btn-sm btn-danger">Excluir</a>
+                    </td>
+                </tr>
+                <% }) %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="5">Nenhum local cadastrado ainda.</td>
+                        </tr>
+                        <% } %>
+    </tbody>
+</table>

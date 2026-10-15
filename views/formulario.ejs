@@ -1,0 +1,65 @@
+<% const erros=locals.erros || { all: [], has: ()=> false, get: () => [] }; %>
+    <% const artista=locals.artista || {} %>
+
+        <h3 class="mt-5">
+            <% if (artista?.id_artista) { %>
+                Atualização de
+                <% } else { %>
+                    Novo
+                    <% } %>
+                        Artista - <%= artista?.nome_artistico || '' %>
+        </h3>
+
+        <form
+            action="<%= artista?.id_artista ? '/artistas/' + artista.id_artista + '/atualizacao' : '/artistas/novo' %>"
+            method="post">
+
+            <% if (erros.all && erros.all.length) { %>
+                <div class="alert alert-danger">
+                    <h6>Não foi possível salvar o artista</h6>
+                    <ul>
+                        <% erros.all.forEach(mensagem=> { %>
+                            <li>
+                                <%= mensagem %>
+                            </li>
+                            <% }) %>
+                    </ul>
+                </div>
+                <% } %>
+
+                    <div class="form-group mb-3">
+                        <label for="nome_artistico" class="form-label">Nome Artístico</label>
+                        <input type="text" class="form-control" name="nome_artistico"
+                            value="<%= artista?.nome_artistico || '' %>" placeholder="Informe o nome artístico">
+
+                        <% if (erros.has('nome_artistico')) { %>
+                            <div class="invalid-feedback d-block">
+                                <ul>
+                                    <% erros.get('nome_artistico').forEach(mensagem=> { %>
+                                        <li><small>
+                                                <%= mensagem %>
+                                            </small></li>
+                                        <% }) %>
+                                </ul>
+                            </div>
+                            <% } %>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="nome_completo" class="form-label">Nome Completo</label>
+                        <input type="text" class="form-control" name="nome_completo"
+                            value="<%= artista?.nome_completo || '' %>" placeholder="Informe o nome completo">
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="genero_musical" class="form-label">Gênero Musical</label>
+                        <input type="text" class="form-control" name="genero_musical"
+                            value="<%= artista?.genero_musical || '' %>" placeholder="Ex: Rock, Sertanejo, Pop">
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <button type="submit" class="btn btn-primary mr-2">Salvar Artista</button>
+                        <a href="/artistas" class="btn btn-warning">Cancelar</a>
+                    </div>
+
+        </form>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastrar Local</title>
+</head>
+<body>
+    <h3>Novo Local</h3>
+
+    <form action="/locais/novo" method="post">
+        <div>
+            <label>Nome do Local:</label><br>
+            <input type="text" name="nome" required>
+        </div>
+        <br>
+        <div>
+            <label>Endereço:</label><br>
+            <input type="text" name="endereco" required>
+        </div>
+        <br>
+        <div>
+            <label>Capacidade (Pessoas):</label><br>
+            <input type="number" name="capacidade" required>
+        </div>
+        <br>
+        <button type="submit">Salvar Local</button>
+        <a href="/locais">Cancelar</a>
+    </form>
+</body>
+</html>
