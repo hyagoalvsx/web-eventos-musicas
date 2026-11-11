@@ -1,12 +1,32 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= titulo %></title>
-</head>
-<body>
-    <h1>Bem-vindo ao Alvesx-Events!</h1>
-    <p>O sistema de gerenciamento de eventos musicais.</p>
-</body>
-</html>
+<% const local = locals.local || {}; %>
+
+<h3 class="mt-5">
+    <% if (local?.id_local) { %>
+        Atualização de Local - <%= local?.nome || '' %>
+    <% } else { %>
+        Novo Local
+    <% } %>
+</h3>
+
+<form action="<%= local?.id_local ? '/locais/' + local.id_local + '/atualizacao' : '/locais/novo' %>" method="post">
+    
+    <div class="form-group mb-3">
+        <label for="nome" class="form-label">Nome do Local</label>
+        <input type="text" class="form-control" name="nome" value="<%= local?.nome || '' %>" required placeholder="Ex: Arena Show">
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="endereco" class="form-label">Endereço</label>
+        <input type="text" class="form-control" name="endereco" value="<%= local?.endereco || '' %>" required placeholder="Informe o endereço completo">
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="capacidade" class="form-label">Capacidade (Pessoas)</label>
+        <input type="number" class="form-control" name="capacidade" value="<%= local?.capacidade || '' %>" required placeholder="Ex: 5000">
+    </div>
+
+    <div class="form-group mb-3">
+        <button type="submit" class="btn btn-primary mr-2">Salvar Local</button>
+        <a href="/locais" class="btn btn-warning">Cancelar</a>
+    </div>
+</form>

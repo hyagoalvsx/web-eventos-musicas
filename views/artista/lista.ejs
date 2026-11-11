@@ -1,5 +1,4 @@
 <h1 class="mt-5">Consulta de Artistas</h1>
-
 <a href="/artistas/novo" class="btn btn-success mt-2">Cadastrar Novo Artista</a>
 
 <table class="table mt-3">
@@ -13,27 +12,23 @@
         </tr>
     </thead>
     <tbody>
-        <% artistas.forEach(function(artista, index) { %>
-            <tr>
-                <td>
-                    <%= index + 1 %>
-                </td>
-                <td>
-                    <%= artista.nome_artistico %>
-                </td>
-                <td>
-                    <%= artista.nome_completo %>
-                </td>
-                <td>
-                    <%= artista.genero_musical %>
-                </td>
-                <td>
-                    <a href="/artistas/<%= artista.id_artista %>/atualizacao"
-                        class="btn btn-sm btn-secondary">Atualizar</a>
-                    <a href="/artistas/<%= artista.id_artista %>/excluir" class="btn btn-sm btn-danger"
-                        onclick="return confirm('Tem certeza que deseja excluir o artista <%= artista.nome_artistico %>?');">Excluir</a>
-                </td>
-            </tr>
+        <% if (locals.artistas && artistas.length > 0) { %>
+            <% artistas.forEach(function(artista, index) { %>
+                <tr>
+                    <td><%= index + 1 %></td>
+                    <td><%= artista.nome_artistico %></td>
+                    <td><%= artista.nome_completo %></td>
+                    <td><%= artista.genero_musical %></td>
+                    <td>
+                        <a href="/artistas/<%= artista.id_artista %>/atualizacao" class="btn btn-sm btn-secondary">Atualizar</a>
+                        <a href="/artistas/<%= artista.id_artista %>/excluir" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir o artista <%= artista.nome_artistico %>?');">Excluir</a>
+                    </td>
+                </tr>
             <% }) %>
+        <% } else { %>
+            <tr>
+                <td colspan="5" class="text-center">Nenhum artista cadastrado.</td>
+            </tr>
+        <% } %>
     </tbody>
 </table>

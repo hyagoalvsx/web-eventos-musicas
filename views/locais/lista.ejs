@@ -1,30 +1,34 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <title>Cadastrar Local</title>
-</head>
-<body>
-    <h3>Novo Local</h3>
+<h1 class="mt-5">Consulta de Locais</h1>
+<a href="/locais/novo" class="btn btn-success mt-2">Cadastrar Novo Local</a>
 
-    <form action="/locais/novo" method="post">
-        <div>
-            <label>Nome do Local:</label><br>
-            <input type="text" name="nome" required>
-        </div>
-        <br>
-        <div>
-            <label>Endereço:</label><br>
-            <input type="text" name="endereco" required>
-        </div>
-        <br>
-        <div>
-            <label>Capacidade (Pessoas):</label><br>
-            <input type="number" name="capacidade" required>
-        </div>
-        <br>
-        <button type="submit">Salvar Local</button>
-        <a href="/locais">Cancelar</a>
-    </form>
-</body>
-</html>
+<table class="table mt-3">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Nome do Local</th>
+            <th>Endereço</th>
+            <th>Capacidade</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% if (locals.locais && locais.length > 0) { %>
+            <% locais.forEach(function(local, index) { %>
+                <tr>
+                    <td><%= index + 1 %></td>
+                    <td><%= local.nome %></td>
+                    <td><%= local.endereco %></td>
+                    <td><%= local.capacidade %></td>
+                    <td>
+                        <a href="/locais/<%= local.id_local %>/atualizacao" class="btn btn-sm btn-secondary">Atualizar</a>
+                        <a href="/locais/<%= local.id_local %>/excluir" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir o local <%= local.nome %>?');">Excluir</a>
+                    </td>
+                </tr>
+            <% }) %>
+        <% } else { %>
+            <tr>
+                <td colspan="5" class="text-center">Nenhum local cadastrado.</td>
+            </tr>
+        <% } %>
+    </tbody>
+</table>

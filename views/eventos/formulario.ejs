@@ -1,0 +1,56 @@
+<% const evento = locals.evento || {}; %>
+
+<h3 class="mt-5">
+    <% if (evento?.id_evento) { %>
+        Atualização de Evento - <%= evento?.nome || '' %>
+    <% } else { %>
+        Novo Evento
+    <% } %>
+</h3>
+
+<form action="<%= evento?.id_evento ? '/eventos/' + evento.id_evento + '/atualizacao' : '/eventos/novo' %>" method="post">
+
+    <div class="form-group mb-3">
+        <label for="nome" class="form-label">Nome do Evento</label>
+        <input type="text" class="form-control" name="nome" value="<%= evento?.nome || '' %>" required placeholder="Nome do evento musical">
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="descricao" class="form-label">Descrição</label>
+        <textarea class="form-control" name="descricao" rows="3" placeholder="Detalhes sobre o evento"><%= evento?.descricao || '' %></textarea>
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="data" class="form-label">Data</label>
+        <input type="date" class="form-control" name="data" value="<%= evento?.data || '' %>" required>
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="horario" class="form-label">Horário</label>
+        <input type="time" class="form-control" name="horario" value="<%= evento?.horario || '' %>" required>
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="status" class="form-label">Status</label>
+        <input type="text" class="form-control" name="status" value="<%= evento?.status || '' %>" required placeholder="Ex: Confirmado, Adiado, Cancelado">
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="id_local" class="form-label">Local do Evento</label>
+        <select class="form-control" name="id_local" required>
+            <option value="">Selecione um local</option>
+            <% if (locals.locais && locais.length > 0) { %>
+                <% locais.forEach(function(l) { %>
+                    <option value="<%= l.id_local %>" <%= evento.id_local == l.id_local ? 'selected' : '' %> >
+                        <%= l.nome %>
+                    </option>
+                <% }) %>
+            <% } %>
+        </select>
+    </div>
+
+    <div class="form-group mb-3">
+        <button type="submit" class="btn btn-primary mr-2">Salvar Evento</button>
+        <a href="/eventos" class="btn btn-warning">Cancelar</a>
+    </div>
+</form>
