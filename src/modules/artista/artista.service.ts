@@ -21,6 +21,15 @@ export class ArtistaService {
       descricao: 'Apresentação emocionante da turnê do álbum SUPER, com efeitos visuais incríveis.',
       imagem: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745',
     },
+    {
+      id: 3,
+      nome:'Doja cat',
+      genero: 'pop/rap',
+      palco: "MorumBIS",
+      horario:'20:00',
+      descricao: 'Show solo no estadio do MorumBIS, na cidade de São Paulo',
+      imagem:'https://upload.wikimedia.org/wikipedia/en/c/cf/Doja_Cat_-_Tour_Ma_Vie_World_Tour.png?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled'
+    }
   ];
 
   findAll() {

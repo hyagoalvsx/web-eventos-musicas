@@ -1,5 +1,8 @@
+
 import express, { Request, Response } from 'express';
 import path from 'path';
+
+export class AppModule {}
 
 const app = express();
 const port = 3000;
