@@ -22,12 +22,12 @@
 
     <div class="form-group mb-3">
         <label for="data" class="form-label">Data</label>
-        <input type="date" class="form-control" name="data" value="<%= evento?.data || '' %>" required>
+        <input type="date" class="form-control" name="data" value="<%= evento?.data ? String(evento.data).slice(0, 10) : '' %>" required>
     </div>
 
     <div class="form-group mb-3">
         <label for="horario" class="form-label">Horário</label>
-        <input type="time" class="form-control" name="horario" value="<%= evento?.horario || '' %>" required>
+        <input type="time" class="form-control" name="horario" value="<%= evento?.horario ? String(evento.horario).slice(0, 5) : '' %>" required>
     </div>
 
     <div class="form-group mb-3">
@@ -48,6 +48,20 @@
             <% } %>
         </select>
     </div>
+
+    <% if (locals.artistas && artistas.length > 0) { %>
+        <div class="form-group mb-3">
+            <label for="artistasIds" class="form-label">Artistas do Evento</label>
+            <% const artistasSelecionados = evento?.artistas ? evento.artistas.map(a => Number(a.id_artista)) : []; %>
+            <select class="form-control" name="artistasIds" multiple size="4">
+                <% artistas.forEach(function(art) { %>
+                    <option value="<%= art.id_artista %>" <%= artistasSelecionados.includes(Number(art.id_artista)) ? 'selected' : '' %>>
+                        <%= art.nome_artistico %>
+                    </option>
+                <% }) %>
+            </select>
+        </div>
+    <% } %>
 
     <div class="form-group mb-3">
         <button type="submit" class="btn btn-primary mr-2">Salvar Evento</button>

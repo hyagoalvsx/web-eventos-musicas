@@ -1,0 +1,46 @@
+<% const cliente = locals.cliente || {}; %>
+
+<h3 class="mt-5">
+    <% if (cliente?.id_cliente) { %>
+        Atualização de Cliente - <%= cliente?.nome || '' %>
+    <% } else { %>
+        Novo Cliente
+    <% } %>
+</h3>
+
+<form action="<%= cliente?.id_cliente ? '/clientes/' + cliente.id_cliente + '/atualizacao' : '/clientes/novo' %>" method="post">
+
+    <div class="form-group mb-3">
+        <label for="nome" class="form-label">Nome Completo</label>
+        <input type="text" class="form-control" name="nome" value="<%= cliente?.nome || '' %>" required placeholder="Informe o nome completo">
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="email" class="form-label">E-mail</label>
+        <input type="email" class="form-control" name="email" value="<%= cliente?.email || '' %>" required placeholder="Ex: cliente@email.com">
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="telefone" class="form-label">Telefone</label>
+        <input type="text" class="form-control" name="telefone" value="<%= cliente?.telefone || '' %>" placeholder="Ex: (69) 99999-9999">
+    </div>
+
+    <% if (locals.eventos && eventos.length > 0) { %>
+        <div class="form-group mb-3">
+            <label for="eventosIds" class="form-label">Participação em Eventos</label>
+            <select class="form-control" name="eventosIds" multiple size="4">
+                <% const selecionados = cliente?.eventosParticipacao ? cliente.eventosParticipacao.map(e => e.id_evento) : []; %>
+                <% eventos.forEach(function(ev) { %>
+                    <option value="<%= ev.id_evento %>" <%= selecionados.includes(ev.id_evento) ? 'selected' : '' %>>
+                        <%= ev.nome %>
+                    </option>
+                <% }) %>
+            </select>
+        </div>
+    <% } %>
+
+    <div class="form-group mb-3">
+        <button type="submit" class="btn btn-primary mr-2">Salvar Cliente</button>
+        <a href="/clientes" class="btn btn-warning">Cancelar</a>
+    </div>
+</form>

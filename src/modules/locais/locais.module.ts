@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { LocaisController } from './locais.controller';
-import { LocaisService } from './locais.service';
+import {CriarLocalDto, LocaisService } from './locais.service';
 
 @Module({
   controllers: [LocaisController],

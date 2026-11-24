@@ -1,0 +1,64 @@
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Consulta de Clientes</h1>
+    <p class="page-subtitle">Gerencie clientes, contatos e participações em eventos</p>
+  </div>
+  <a href="/clientes/novo" class="btn btn-primary">Cadastrar Novo Cliente</a>
+</div>
+
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Nome</th>
+        <th>E-mail</th>
+        <th>Telefone</th>
+        <th>Eventos</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (locals.clientes && clientes.length > 0) { %>
+        <% clientes.forEach(function(cliente, index) { %>
+          <tr>
+            <td><%= index + 1 %></td>
+            <td><strong><%= cliente.nome %></strong></td>
+            <td><%= cliente.email %></td>
+            <td><%= cliente.telefone || 'Não informado' %></td>
+            <td>
+              <% if (cliente.eventosParticipacao && cliente.eventosParticipacao.length > 0) { %>
+                <%= cliente.eventosParticipacao.map(function(ev) { return ev.nome; }).join(', ') %>
+              <% } else { %>
+                Nenhum
+              <% } %>
+            </td>
+            <td>
+              <div class="actions-cell">
+                <a href="/clientes/<%= cliente.id_cliente %>" class="btn btn-outline btn-sm">Atualizar</a>
+                <form action="/clientes/<%= cliente.id_cliente %>/excluir" method="POST" class="inline-form">
+                  <button
+                    type="submit"
+                    class="btn btn-danger-outline btn-sm"
+                    onclick="return confirm('Tem certeza que deseja excluir o cliente <%= cliente.nome %>?');"
+                  >
+                    Excluir
+                  </button>
+                </form>
+              </div>
+            </td>
+          </tr>
+        <% }) %>
+      <% } else { %>
+        <tr>
+          <td colspan="6">
+            <div class="empty-state">
+              <p>Nenhum cliente cadastrado.</p>
+              <a href="/clientes/novo" class="btn btn-primary btn-sm">Cadastrar primeiro cliente</a>
+            </div>
+          </td>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+</div>

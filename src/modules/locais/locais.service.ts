@@ -1,11 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-
-export interface LocalItem {
-  id: number;
-  nome: string;
-  endereco: string;
-  capacidade: number;
-}
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { DataSource, Repository } from 'typeorm';
+import { DATABASE_SOURCE } from '../../config/constants/database-source';
+import { Local } from './locais.entity';
 
 export interface CriarLocalDto {
   nome: string;
@@ -15,63 +11,56 @@ export interface CriarLocalDto {
 
 @Injectable()
 export class LocaisService {
-  private locais: LocalItem[] = [
-    {
-      id: 1,
-      nome: 'Arena Show',
-      endereco: 'Rua Principal, 100',
-      capacidade: 500,
-    },
-  ];
-  private proximoId = 2;
+  private readonly localRepository: Repository<Local>;
 
-  findAll(): LocalItem[] {
-    return this.locais;
+  constructor(
+    @Inject(DATABASE_SOURCE)
+    private readonly dataSource: DataSource,
+  ) {
+    this.localRepository = this.dataSource.getRepository(Local);
   }
 
-  findOne(id: number): LocalItem | undefined {
-    return this.locais.find((local) => local.id === id);
+  async findAll(): Promise<Local[]> {
+    return this.localRepository.find({
+      order: { id_local: 'DESC' },
+    });
   }
 
-  create(dados: CriarLocalDto): LocalItem {
-    const novoLocal: LocalItem = {
-      id: this.proximoId++,
+  async findOne(id: number): Promise<Local | null> {
+    return this.localRepository.findOne({
+      where: { id_local: id },
+    });
+  }
+
+  async create(dados: CriarLocalDto): Promise<Local> {
+    const novoLocal = this.localRepository.create({
       nome: (dados.nome ?? '').trim(),
       endereco: (dados.endereco ?? '').trim(),
       capacidade: Number(dados.capacidade) || 0,
-    };
+    });
 
-    this.locais.push(novoLocal);
-    return novoLocal;
+    return this.localRepository.save(novoLocal);
   }
 
-  update(id: number, dados: Partial<CriarLocalDto>): LocalItem {
-    const index = this.locais.findIndex((local) => local.id === id);
-    if (index === -1) {
+  async update(id: number, dados: Partial<CriarLocalDto>): Promise<Local> {
+    const local = await this.findOne(id);
+    if (!local) {
       throw new NotFoundException(`Local com id ${id} não encontrado.`);
     }
 
-    const atual = this.locais[index];
-    const atualizado: LocalItem = {
-      ...atual,
-      nome: dados.nome !== undefined ? dados.nome.trim() : atual.nome,
-      endereco:
-        dados.endereco !== undefined ? dados.endereco.trim() : atual.endereco,
-      capacidade:
-        dados.capacidade !== undefined
-          ? Number(dados.capacidade) || 0
-          : atual.capacidade,
-    };
+    if (dados.nome !== undefined) local.nome = dados.nome.trim();
+    if (dados.endereco !== undefined) local.endereco = dados.endereco.trim();
+    if (dados.capacidade !== undefined) {
+      local.capacidade = Number(dados.capacidade) || 0;
+    }
 
-    this.locais[index] = atualizado;
-    return atualizado;
+    return this.localRepository.save(local);
   }
 
-  remove(id: number): void {
-    const index = this.locais.findIndex((local) => local.id === id);
-    if (index === -1) {
+  async remove(id: number): Promise<void> {
+    const resultado = await this.localRepository.delete({ id_local: id });
+    if (!resultado.affected) {
       throw new NotFoundException(`Local com id ${id} não encontrado.`);
     }
-    this.locais.splice(index, 1);
   }
 }

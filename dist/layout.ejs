@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= typeof titulo !== 'undefined' ? titulo : 'AlvesxEvents' %></title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="/" class="brand">
+        <span>AlvesxEvents</span>
+      </a>
+      <nav class="nav-links">
+        <a href="/eventos" class="nav-link">Eventos</a>
+        <a href="/artistas" class="nav-link">Artistas</a>
+        <a href="/locais" class="nav-link">Locais</a>
+        <a href="/clientes" class="nav-link">Clientes</a>
+        <a href="/ingressos" class="nav-link">Ingressos</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <%- body %>
+  </main>
+</body>
+</html>

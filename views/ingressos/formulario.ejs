@@ -1,0 +1,60 @@
+<% const ingresso = locals.ingresso || {}; %>
+
+<h3 class="mt-5">
+    <% if (ingresso?.id_ingresso) { %>
+        Atualização de Ingresso - #<%= ingresso?.id_ingresso || '' %>
+    <% } else { %>
+        Novo Ingresso
+    <% } %>
+</h3>
+
+<form action="<%= ingresso?.id_ingresso ? '/ingressos/' + ingresso.id_ingresso + '/atualizacao' : '/ingressos/novo' %>" method="post">
+
+    <div class="form-group mb-3">
+        <label for="tipo" class="form-label">Tipo</label>
+        <input type="text" class="form-control" name="tipo" value="<%= ingresso?.tipo || '' %>" required placeholder="Ex: Pista, VIP, Camarote">
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="preco" class="form-label">Preço</label>
+        <input type="number" step="0.01" min="0" class="form-control" name="preco" value="<%= ingresso?.preco || '' %>" required placeholder="Ex: 120.00">
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="status" class="form-label">Status</label>
+        <input type="text" class="form-control" name="status" value="<%= ingresso?.status || '' %>" required placeholder="Ex: Disponível, Reservado, Pago">
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="id_evento" class="form-label">Evento</label>
+        <select class="form-control" name="id_evento" required>
+            <option value="">Selecione um evento</option>
+            <% if (locals.eventos && eventos.length > 0) { %>
+                <% eventos.forEach(function(ev) { %>
+                    <option value="<%= ev.id_evento %>" <%= ingresso.id_evento == ev.id_evento ? 'selected' : '' %>>
+                        <%= ev.nome %>
+                    </option>
+                <% }) %>
+            <% } %>
+        </select>
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="id_cliente" class="form-label">Cliente (Opcional)</label>
+        <select class="form-control" name="id_cliente">
+            <option value="">Sem cliente</option>
+            <% if (locals.clientes && clientes.length > 0) { %>
+                <% clientes.forEach(function(cli) { %>
+                    <option value="<%= cli.id_cliente %>" <%= ingresso.id_cliente == cli.id_cliente ? 'selected' : '' %>>
+                        <%= cli.nome %>
+                    </option>
+                <% }) %>
+            <% } %>
+        </select>
+    </div>
+
+    <div class="form-group mb-3">
+        <button type="submit" class="btn btn-primary mr-2">Salvar Ingresso</button>
+        <a href="/ingressos" class="btn btn-warning">Cancelar</a>
+    </div>
+</form>

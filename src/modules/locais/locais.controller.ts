@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  Render,
-  Res,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Render, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { CriarLocalDto, LocaisService } from './locais.service';
 
@@ -16,55 +8,68 @@ export class LocaisController {
 
   @Get()
   @Render('locais/lista')
-  listarLocais() {
-    const locais = this.locaisService.findAll();
+  async listar() {
+    const locais = await this.locaisService.findAll();
     return {
       titulo: 'Locais — AlvesxEvents',
       locais,
-      listaLocais: locais,
     };
   }
 
   @Get('novo')
   @Render('locais/formulario')
-  formularioNovoLocal() {
+  formularioNovo() {
     return {
       titulo: 'Novo Local — AlvesxEvents',
       local: null,
-      acao: '/locais/novo',
     };
   }
 
   @Post('novo')
-  criarLocal(@Body() body: CriarLocalDto, @Res() res: Response) {
-    this.locaisService.create(body);
+  async criar(@Body() body: CriarLocalDto, @Res() res: Response) {
+    await this.locaisService.create(body);
     return res.redirect('/locais');
+  }
+
+  @Get(':id/atualizacao')
+  @Render('locais/formulario')
+  async formularioAtualizacao(@Param('id') id: string) {
+    const local = await this.locaisService.findOne(Number(id));
+    return {
+      titulo: local ? `Atualização de Local - ${local.nome}` : 'Local não encontrado',
+      local,
+    };
   }
 
   @Get(':id')
   @Render('locais/formulario')
-  formularioEditarLocal(@Param('id') id: string) {
-    const local = this.locaisService.findOne(Number(id)) ?? null;
+  async formularioEditar(@Param('id') id: string) {
+    const local = await this.locaisService.findOne(Number(id));
     return {
-      titulo: local ? `Editar Local: ${local.nome}` : 'Local não encontrado',
+      titulo: local ? `Atualização de Local - ${local.nome}` : 'Local não encontrado',
       local,
-      acao: local ? `/locais/${local.id}/atualizar` : '/locais/novo',
     };
   }
 
-  @Post(':id/atualizar')
-  atualizarLocal(
+  @Post(':id/atualizacao')
+  async atualizar(
     @Param('id') id: string,
     @Body() body: CriarLocalDto,
     @Res() res: Response,
   ) {
-    this.locaisService.update(Number(id), body);
+    await this.locaisService.update(Number(id), body);
+    return res.redirect('/locais');
+  }
+
+  @Get(':id/excluir')
+  async excluirGet(@Param('id') id: string, @Res() res: Response) {
+    await this.locaisService.remove(Number(id));
     return res.redirect('/locais');
   }
 
   @Post(':id/excluir')
-  excluirLocal(@Param('id') id: string, @Res() res: Response) {
-    this.locaisService.remove(Number(id));
+  async excluirPost(@Param('id') id: string, @Res() res: Response) {
+    await this.locaisService.remove(Number(id));
     return res.redirect('/locais');
   }
 }
